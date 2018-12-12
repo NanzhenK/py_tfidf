@@ -33,3 +33,5 @@ def doc2onehot_tfidf(self, data):
     tfidf = tf * np.array(idf)
     res = np.asarray(tfidf, dtype='f')
     return res
+
+
