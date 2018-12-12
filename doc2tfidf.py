@@ -1,13 +1,29 @@
     
 import numpy as np
 
+def __bow(data, freq):
+    fd = {}
+    for mail in data:
+        for token in mail:
+            if token in fd:
+                fd[token] += 1
+            else:
+                fd[token] = 1
+    fd = sorted(fd.items(),
+                key=lambda items: items[1],
+                reverse=True)
+    l1 = [w for (w, f) in list(fd)[:int(len(list(fd)) / freq)]]
+    l2 = [w for (w, f) in list(fd) if f > freq]
+    return l1 if len(l1) < len(l2) else l2
+
 def doc2onehot_tfidf(self, data):
-    onehot = np.zeros((len(data), len(self.__voc)))
-    tf = np.zeros((len(data), len(self.__voc)))
+    __voc = __bow(data, 10)
+    onehot = np.zeros((len(data), len(__voc)))
+    tf = np.zeros((len(data), len(__voc)))
     for d, sentence in enumerate(data):
         for word in sentence:
-            if word in self.__voc:
-                pos = self.__voc.index(word)
+            if word in __voc:
+                pos = __voc.index(word)
                 onehot[d][pos] = 1
                 tf[d][pos] += 1
     row_sum = tf.sum(axis=1)+1
